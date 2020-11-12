@@ -353,6 +353,15 @@ def max_scoring_num_rolls(dice=six_sided, trials_count=1000):
     """
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
+    mean = make_averaged(roll_dice, trials_count)
+    max_num = 0
+    max_score = 0
+    for i in range(1, 11):
+    	mean_score = mean(i, dice)
+    	if mean_score > max_score:
+    		max_num = i
+    		max_score = mean_score
+    return max_num
     # END PROBLEM 9
 
 
@@ -402,7 +411,11 @@ def bacon_strategy(score, opponent_score, cutoff=8, num_rolls=6):
     rolls NUM_ROLLS otherwise.
     """
     # BEGIN PROBLEM 10
-    return 6  # Replace this statement
+    if free_bacon(opponent_score) >= cutoff:
+    	num = 0
+    else:
+    	num = num_rolls
+    return num  # Replace this statement
     # END PROBLEM 10
 
 
@@ -412,7 +425,14 @@ def extra_turn_strategy(score, opponent_score, cutoff=8, num_rolls=6):
     Otherwise, it rolls NUM_ROLLS.
     """
     # BEGIN PROBLEM 11
-    return 6  # Replace this statement
+    next_score = free_bacon(opponent_score) + score
+    if extra_turn(next_score, opponent_score):
+    	num = 0
+    elif free_bacon(opponent_score) >= cutoff:
+    	num = 0
+    else:
+    	num = num_rolls
+    return num  # Replace this statement
     # END PROBLEM 11
 
 
