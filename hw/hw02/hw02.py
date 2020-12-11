@@ -23,6 +23,14 @@ def num_eights(x):
     True
     """
     "*** YOUR CODE HERE ***"
+    if x == 8:
+        return 1
+    elif x < 10:
+        return 0
+    elif x % 10 == 8:
+        return 1 + num_eights(x//10)
+    else:
+        return num_eights(x//10)
 
 
 def pingpong(n):
@@ -58,7 +66,14 @@ def pingpong(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    def helper(n,i,flag):
+        if n == i:
+            return 1
+        if num_eights(i) > 0 or i % 8 == 0:
+            return helper(n,i+1,flag*-1) + flag*-1
+        return helper(n,i+1,flag) + flag
 
+    return helper(n,1,1)
 
 def missing_digits(n):
     """Given a number a that is in sorted, increasing order,
