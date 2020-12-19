@@ -33,6 +33,11 @@ def distance(city_a, city_b):
     5.0
     """
     "*** YOUR CODE HERE ***"
+    dif_lat = get_lat(city_a) - get_lat(city_b)
+    dif_lon = get_lon(city_a) - get_lon(city_b)
+    dif_lat = dif_lat * dif_lat
+    dif_lon = dif_lon * dif_lon
+    return sqrt(dif_lat + dif_lon)
 
 def closer_city(lat, lon, city_a, city_b):
     """
