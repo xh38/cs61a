@@ -44,11 +44,13 @@ def planet(size):
     """Construct a planet of some size."""
     assert size > 0
     "*** YOUR CODE HERE ***"
+    return ['planet', size]
 
 def size(w):
     """Select the size of a planet."""
     assert is_planet(w), 'must call size on a planet'
     "*** YOUR CODE HERE ***"
+    return w[1]
 
 def is_planet(w):
     """Whether w is a planet."""
@@ -105,6 +107,17 @@ def balanced(m):
     True
     """
     "*** YOUR CODE HERE ***"
+    if is_planet(end(left(m))) and is_planet(end(right(m))):
+            return total_weight(end(left(m))) * length(left(m)) == total_weight(end(right(m))) * length(right(m))
+    if is_mobile(end(left(m))):
+        if not balanced(end(left(m))):
+            return False
+    if is_mobile(end(right(m))):
+        if not balanced(end(right(m))):
+            return False
+    total_left = total_weight(end(left(m))) * length(left(m))
+    total_right = total_weight(end(right(m))) * length(right(m))
+    return total_left == total_right
 
 def totals_tree(m):
     """Return a tree representing the mobile with its total weight at the root.
@@ -136,6 +149,10 @@ def totals_tree(m):
     True
     """
     "*** YOUR CODE HERE ***"
+    if is_planet(m):
+        return tree(total_weight(m),[])
+    if is_mobile(m):
+        return tree(total_weight(m), [totals_tree(end(left(m))), totals_tree(end(right(m)))])
 
 
 def replace_leaf(t, find_value, replace_value):
@@ -168,6 +185,11 @@ def replace_leaf(t, find_value, replace_value):
     True
     """
     "*** YOUR CODE HERE ***"
+    if branches(t) == []:
+        if label(t) == find_value:
+            return tree(replace_value, [])
+        return tree(label(t), [])
+    return tree(label(t), [replace_leaf(i, find_value, replace_value) for i in branches(t)])
 
 
 def preorder(t):
@@ -181,6 +203,7 @@ def preorder(t):
     [2, 4, 6]
     """
     "*** YOUR CODE HERE ***"
+    
 
 
 def has_path(t, word):
@@ -213,6 +236,14 @@ def has_path(t, word):
     """
     assert len(word) > 0, 'no path for empty word.'
     "*** YOUR CODE HERE ***"
+    if not label(t) == word[0]:
+        return False
+    elif len(word) == 1:
+        return True
+    if is_leaf(t):
+        return False
+    return has_path(i, word[1:]) or has_path(i, word[1:]) for i in branches(t)
+    
 
 
 def interval(a, b):

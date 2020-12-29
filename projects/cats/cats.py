@@ -17,6 +17,15 @@ def choose(paragraphs, select, k):
     """
     # BEGIN PROBLEM 1
     "*** YOUR CODE HERE ***"
+    i, j = 0, 0
+    while i < k + 1 and j < len(paragraphs):
+        if select(paragraphs[j]):
+            i += 1
+        j += 1
+    if i != k + 1:
+        return ''
+    else:
+        return paragraphs[j - 1]
     # END PROBLEM 1
 
 
@@ -33,6 +42,14 @@ def about(topic):
     assert all([lower(x) == x for x in topic]), 'topics should be lowercase.'
     # BEGIN PROBLEM 2
     "*** YOUR CODE HERE ***"
+    def isAbout(paragraphs):
+        words = split(remove_punctuation(paragraphs))
+        for i in topic:
+            for j in words:
+                if i == lower(j):
+                    return True
+        return False
+    return isAbout
     # END PROBLEM 2
 
 
@@ -57,6 +74,15 @@ def accuracy(typed, reference):
     reference_words = split(reference)
     # BEGIN PROBLEM 3
     "*** YOUR CODE HERE ***"
+    if len(typed_words) == 0:
+        return 0.0
+    correctlyTypedWord = 0
+    i = 0
+    while i < len(reference_words) and i < len(typed_words):
+        if reference_words[i] == typed_words[i]:
+            correctlyTypedWord += 1
+        i += 1
+    return correctlyTypedWord / len(typed_words) * 100.0
     # END PROBLEM 3
 
 
@@ -65,6 +91,9 @@ def wpm(typed, elapsed):
     assert elapsed > 0, 'Elapsed time must be positive'
     # BEGIN PROBLEM 4
     "*** YOUR CODE HERE ***"
+    words = len(typed) / 5
+    time = elapsed / 60
+    return words / time
     # END PROBLEM 4
 
 
@@ -75,6 +104,20 @@ def autocorrect(user_word, valid_words, diff_function, limit):
     """
     # BEGIN PROBLEM 5
     "*** YOUR CODE HERE ***"
+    min_dif = limit + 1
+    correct_word = ''
+    if user_word in valid_words:
+        return user_word
+    for word in valid_words:
+        dif = diff_function(user_word, word, limit)
+        if dif == 0:
+            return word
+        if dif < min_dif:
+            min_dif = dif
+            correct_word = word
+    if min_dif > limit:
+        return user_word
+    return correct_word
     # END PROBLEM 5
 
 
@@ -84,30 +127,62 @@ def shifty_shifts(start, goal, limit):
     their lengths.
     """
     # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
+    # def shifty_helper(start, goal, limit, now):
+    #     if now > limit:
+    #         return now
+    #     if not goal and not start:
+    #         return now
+    #     if not start:
+    #         return shifty_helper(start, goal[1:], limit, now + 1)
+    #     if not goal:
+    #         return shifty_helper(start[1:], goal, limit, now + 1)
+    #     if start[0] == goal[0]:
+    #         return shifty_helper(start[1:], goal[1:], limit, now)
+    #     else:
+    #         return shifty_helper(start[1:], goal[1:], limit, now + 1)
+    #
+    # return shifty_helper(start, goal, limit, 0)
+    if start == goal:
+        return 0
+    elif limit == 0:
+        return 1
+    elif not start or not goal:
+        return max(len(start), len(goal))
+    elif start[0] == goal[0]:
+        return shifty_shifts(start[1:], goal[1:], limit)
+    else:
+        return shifty_shifts(start[1:], goal[1:], limit - 1) + 1
     # END PROBLEM 6
 
 
 def pawssible_patches(start, goal, limit):
     """A diff function that computes the edit distance from START to GOAL."""
-    assert False, 'Remove this line'
 
-    if ______________: # Fill in the condition
+    if start == goal: # Fill in the condition
         # BEGIN
         "*** YOUR CODE HERE ***"
+        return 0
         # END
 
-    elif ___________: # Feel free to remove or add additional cases
+    elif limit == 0:
+        return 1
+
+    elif not start or not goal: # Feel free to remove or add additional cases
         # BEGIN
         "*** YOUR CODE HERE ***"
+        return max(len(start), len(goal))
         # END
+
+    elif start[0] == goal[0]:
+        return pawssible_patches(start[1:], goal[1:], limit)
 
     else:
-        add_diff = ... # Fill in these lines
-        remove_diff = ...
-        substitute_diff = ...
+        add_diff = pawssible_patches(start, goal[1:], limit - 1) + 1# Fill in these lines
+        remove_diff = pawssible_patches(start[1:], goal, limit - 1) + 1
+        substitute_diff = pawssible_patches(start[1:], goal[1:], limit - 1) + 1
         # BEGIN
         "*** YOUR CODE HERE ***"
+        return min(add_diff, remove_diff, substitute_diff)
         # END
 
 

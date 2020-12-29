@@ -55,6 +55,12 @@ def closer_city(lat, lon, city_a, city_b):
     'Bucharest'
     """
     "*** YOUR CODE HERE ***"
+    city_c = make_city('city_temp', lat, lon)
+    dis1 = distance(city_c, city_a)
+    dis2 = distance(city_c, city_b)
+    if dis1 < dis2:
+        return get_name(city_a)
+    return get_name(city_b)
 
 def check_city_abstraction():
     """
@@ -154,6 +160,18 @@ def berry_finder(t):
     True
     """
     "*** YOUR CODE HERE ***"
+    flag = False
+    if is_leaf(t):
+        if label(t) == "berry":
+            return True
+
+    for i in branches(t):
+        if label(i) == "berry":
+            flag = True
+        if is_tree(i):
+            if berry_finder(i):
+                flag = True
+    return flag
 
 
 def sprout_leaves(t, leaves):
@@ -190,6 +208,11 @@ def sprout_leaves(t, leaves):
           2
     """
     "*** YOUR CODE HERE ***"
+    if is_leaf(t):
+        newtree = tree(label(t), [tree(i) for i in leaves])
+        return newtree
+    newtree = tree(label(t), [sprout_leaves(i, leaves) for i in branches(t)]) 
+    return newtree   
 
 # Abstraction tests for sprout_leaves and berry_finder
 def check_abstraction():
@@ -248,7 +271,7 @@ def coords(fn, seq, lower, upper):
     [[-2, 4], [1, 1], [3, 9]]
     """
     "*** YOUR CODE HERE ***"
-    return ______
+    return [[x,fn(x)] for x in seq if lower <= fn(x) <= upper]
 
 
 def riffle(deck):
@@ -261,8 +284,7 @@ def riffle(deck):
     [0, 10, 1, 11, 2, 12, 3, 13, 4, 14, 5, 15, 6, 16, 7, 17, 8, 18, 9, 19]
     """
     "*** YOUR CODE HERE ***"
-    return _______
-
+    return [deck[(i % 2) * len(deck) // 2 + i // 2] for i in range(len(deck))]
 
 def add_trees(t1, t2):
     """
@@ -300,6 +322,12 @@ def add_trees(t1, t2):
       5
     """
     "*** YOUR CODE HERE ***"
+    if not t1:
+        return t2
+    if not t2:
+        return t1
+    new_label = label(t1) + label(t2)
+    
 
 
 def build_successors_table(tokens):
