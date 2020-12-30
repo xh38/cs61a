@@ -200,6 +200,16 @@ def report_progress(typed, prompt, user_id, send):
     """Send a report of your id and progress so far to the multiplayer server."""
     # BEGIN PROBLEM 8
     "*** YOUR CODE HERE ***"
+    correctly_typed_word = 0
+    i = 0
+    for word in typed:
+        if not word == prompt[i]:
+            break
+        else:
+            correctly_typed_word, i = correctly_typed_word + 1, i + 1
+    progress = correctly_typed_word / len(prompt)
+    send({'id':user_id, 'progress':progress})
+    return progress
     # END PROBLEM 8
 
 
@@ -226,6 +236,15 @@ def time_per_word(times_per_player, words):
     """
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
+    times = []
+    temp = []
+    for i in range(len(times_per_player)):
+        for j in range(1, len(times_per_player[i])):
+            temp.append(times_per_player[i][j] - times_per_player[i][j - 1])
+        times.append(temp)
+        temp = []
+    new_game = game(words, times)
+    return new_game
     # END PROBLEM 9
 
 
@@ -241,6 +260,23 @@ def fastest_words(game):
     word_indices = range(len(all_words(game)))    # contains an *index* for each word
     # BEGIN PROBLEM 10
     "*** YOUR CODE HERE ***"
+    def is_first_min(game, player, word_index):
+        for i in range(len(all_times(game))):
+            if time(game, i, word_index) < time(game, player, word_index):
+                return False
+            elif time(game, i, word_index) == time(game, player, word_index) and i < player:
+                return False
+        return True
+    fastest = []
+    list = []
+    for i in player_indices:
+        for j in word_indices:
+            if is_first_min(game, i, j):
+                list.append(word_at(game, j))
+        fastest.append(list)
+        list = []
+    return fastest
+
     # END PROBLEM 10
 
 
